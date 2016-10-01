@@ -68,9 +68,9 @@ class EmailSender:
         self.passwd = ToRead 
         self.recipient = ToRead
 
-    def send_email(subject, body):
+    def send(self, subject, body):
         FROM = self.user
-        TO = self.recipient if type(self.recipient) is list else [recipient]
+        TO = self.recipient if type(self.recipient) is list else [self.recipient]
         SUBJECT = subject
         TEXT = body
 
