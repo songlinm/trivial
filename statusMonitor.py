@@ -73,8 +73,10 @@ def monitor():
 def handleServiceStatus(oldStatus, newStatus):
     print (newStatus.timestamp, ': ', newStatus.statusStr)
     print ('  old status - ', oldStatus.timestamp, ': ', oldStatus.statusStr)
-    if 'Good' not in newStatus.statusStr and 'Closed' not in newStatus.statusStr:
-        if 'Good' in oldStatus.statusStr or 'Closed' in oldStatus.statusStr:
+    if ('good' not in newStatus.statusStr.lower() and 
+        'closed' not in newStatus.statusStr.lower()):
+        if ('good' in oldStatus.statusStr.lower() or 
+            'closed' in oldStatus.statusStr.lower()):
             EmailSender().send('Jubilee line service alert', 
                                'Service status ' + newStatus.statusStr)
 
