@@ -59,13 +59,16 @@ def monitor():
     while True:
         newStatus = ServiceStatus()
 
-        with urllib.request.urlopen('https://tfl.gov.uk/tube-dlr-overground/status/', 
-                                    context=ctx) as f:
-            parser = ServiceStatusParser(newStatus)
-            parser.feed(f.read().decode('utf-8'))
-
-        handleServiceStatus(oldStatus, newStatus)
-        oldStatus = newStatus
+        try:
+            with urllib.request.urlopen('https://tfl.gov.uk/tube-dlr-overground/status/', 
+                                        context=ctx) as f:
+                if f.getcode() == 200:
+                    parser = ServiceStatusParser(newStatus)
+                    parser.feed(f.read().decode('utf-8'))
+                    handleServiceStatus(oldStatus, newStatus)
+                    oldStatus = newStatus
+        except Exception as inst:
+            print (inst)
 
         if exitFlag.wait(timeout=600):
             return
