@@ -56,12 +56,14 @@ def monitor():
 
     oldStatus = ServiceStatus()
     exitFlag = threading.Event()
+    opener = urllib.request.build_opener(urllib.request.HTTPSHandler(context=ctx))
+    opener.addheaders = [('User-Agent', 
+                          'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko')]
     while True:
         newStatus = ServiceStatus()
 
         try:
-            with urllib.request.urlopen('https://tfl.gov.uk/tube-dlr-overground/status/', 
-                                        context=ctx) as f:
+            with opener.open('https://tfl.gov.uk/tube-dlr-overground/status/') as f:
                 if f.getcode() == 200:
                     parser = ServiceStatusParser(newStatus)
                     parser.feed(f.read().decode('utf-8'))
